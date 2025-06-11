@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
-import openai
+from openai import OpenAI
 
 from django.contrib import auth
 from django.contrib.auth.models import User
@@ -9,9 +9,10 @@ from django.utils import timezone
 
 openai_api_key = "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"
 openai.api_key = openai_api_key
+client = OpenAI(api_key=openai_api_key)
 
 def ask_openai(message):
-    response = openai.ChatCompletion.create(
+    response = client.chat.completions.create(
         model = "gpt-4",
         messages=[
             {"role":"system",
@@ -25,6 +26,8 @@ def ask_openai(message):
 
 # Create your views here.
 def chatbot(request):
+    if not request.user.is_authenticated:
+        return redirect('login')
     chats = Chat.objects.filter(user=request.user)
     if request.method == "POST":
         message = request.POST.get('message')
