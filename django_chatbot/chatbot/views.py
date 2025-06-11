@@ -7,13 +7,14 @@ from django.contrib.auth.models import User
 from .models import Chat
 from django.utils import timezone
 
-openai_api_key = "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"
+#put your valid apikey
+openai_api_key = "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"
 openai.api_key = openai_api_key
 client = OpenAI(api_key=openai_api_key)
 
 def ask_openai(message):
     response = client.chat.completions.create(
-        model = "gpt-4",
+        model = "gpt-4o-mini",
         messages=[
             {"role":"system",
              "content":"You are an helpful assistant"},
